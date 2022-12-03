@@ -1,2 +1,3 @@
 *.ipynb
 day*/
+__pycache__/
