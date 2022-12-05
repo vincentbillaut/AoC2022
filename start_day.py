@@ -60,6 +60,6 @@ class AdventOfCodeDay:
         func = lambda l: int(l.strip())
         return self._load_all_lines(func)
 
-    def load_strings(self):
-        func = lambda l: l.strip()
+    def load_strings(self, strip=True):
+        func = (lambda l: l.strip()) if strip else (lambda l: l)
         return self._load_all_lines(func)
