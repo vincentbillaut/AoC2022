@@ -1,13 +1,8 @@
 import numpy as np
 from start_day import AdventOfCodeDay
 
-aoc = AdventOfCodeDay(3)
 
-data = aoc.load_strings()
-
-
-def value(item):
-    return ord(item) - (96 if item in "qwertyuiopasdfghjklzxcvbnm" else 38)
+value = lambda item: ord(item) - (96 if item in "qwertyuiopasdfghjklzxcvbnm" else 38)
 
 
 def parse_rucksack(r):
@@ -24,6 +19,10 @@ def parse_set(r1, r2, r3):
     return value(badge)
 
 
-print("Solution")
-print("  1.", sum([parse_rucksack(r) for r in data]))
-print("  2.", sum([parse_set(data[3 * i], data[3 * i + 1], data[3 * i + 2]) for i in range(len(data) // 3)]))
+if __name__ == "__main__":
+    aoc = AdventOfCodeDay(3)
+    data = aoc.load_strings()
+
+    print("Solution")
+    print("  1.", sum([parse_rucksack(r) for r in data]))
+    print("  2.", sum([parse_set(data[3 * i], data[3 * i + 1], data[3 * i + 2]) for i in range(len(data) // 3)]))

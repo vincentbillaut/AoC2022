@@ -21,15 +21,6 @@ def get_crates(data):
     return crates
 
 
-def get_moves(data):
-    moves = []
-    for l in data:
-        match = re.match(move_pattern, l)
-        if match:
-            moves.append((int(match.group(1)), int(match.group(2)), int(match.group(3))))
-    return moves
-
-
 def apply_moves(orig_crates, moves):
     crates = deepcopy(orig_crates)
     for n, from_crate, to_crate in moves:
@@ -55,7 +46,7 @@ if __name__ == "__main__":
     data = aoc.load_strings(strip=False)
 
     reversed_crates = get_crates(data)
-    moves = get_moves(data)
+    moves = [(int(a), int(b), int(c)) for a, b, c in aoc.load_regex(move_pattern, 3)]
 
     # reverse crates
     crates = {}

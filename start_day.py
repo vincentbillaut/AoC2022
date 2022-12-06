@@ -1,5 +1,6 @@
 import browser_cookie3
 import os
+import re
 import requests
 import shutil
 import sys
@@ -54,6 +55,15 @@ class AdventOfCodeDay:
         with open(self.input_path, "r") as f:
             for l in f:
                 data.append(proc_f(l))
+        return data
+
+    def load_regex(self, pattern, n, strip=False):
+        data = []
+        with open(self.input_path, "r") as f:
+            for l in f:
+                match = re.match(pattern, l.strip() if strip else l)
+                if match:
+                    data.append(tuple([match.group(i + 1) for i in range(n)]))
         return data
 
     def load_integers(self):
