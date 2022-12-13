@@ -14,19 +14,23 @@ def get_browser_cookies():
 
 
 class AdventOfCodeDay:
-    def __init__(self, day: int = None, overwrite: bool = False):
+    def __init__(self, day: int = None, overwrite: bool = False, display: bool = False):
         # initialize_day
         if day is None:
             day = int(date.today().strftime("%d").lstrip("0"))
-            print(f"Initializing day {day} (today's date)")
+            if display:
+                print(f"Initializing day {day} (today's date)")
         else:
-            print(f"Initializing day {day}")
+            if display:
+                print(f"Initializing day {day}")
         self.day: int = day
         # get cookies
-        print("... getting browser cookies")
+        if display:
+            print("... getting browser cookies")
         cj = get_browser_cookies()
         # get inputs
-        print("... getting input")
+        if display:
+            print("... getting input")
         dir_path, file_path = f"day{day}", f"input{day}"
         if not os.path.exists(dir_path) or overwrite:
             if not os.path.exists(dir_path):
@@ -35,12 +39,15 @@ class AdventOfCodeDay:
             r = requests.get(f"https://adventofcode.com/2022/day/{day}/input", cookies=cj)
             with open(file_path, "w") as f:
                 f.write(r.text)
-            print("Done.")
+            if display:
+                print("Done.")
             os.chdir("..")
         else:
-            print("Input folder already existed (nothing done).")
+            if display:
+                print("Input folder already existed (nothing done).")
         self.input_path = os.path.join(dir_path, file_path)
-        self._display_head()
+        if display:
+            self._display_head()
 
     def _display_head(self, n=5):
         print("\n", "-" * 40)
