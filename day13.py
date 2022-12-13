@@ -1,5 +1,6 @@
 import math
 from copy import deepcopy
+from functools import cmp_to_key
 from start_day import AdventOfCodeDay
 
 
@@ -23,24 +24,11 @@ def compare_packets(left, right):
         return compare_packets([left], right)
 
 
-def sort_packets_in_place(p_list):
-    # bubble sort
-    i, n = 0, len(p_list)
-    while i < n - 1:
-        if compare_packets(p_list[i], p_list[i + 1]):
-            i += 1
-        else:  # swap
-            temp = p_list[i]
-            p_list[i] = p_list[i + 1]
-            p_list[i + 1] = temp
-            i = max(0, i - 1)
-
-
 def decoder_key(packets):
     all_packets = deepcopy(packets)
     all_packets.extend([[[2]], [[6]]])  # divider packets
-    sort_packets_in_place(all_packets)
-    return math.prod([i + 1 for i, p in enumerate(all_packets) if p == [[2]] or p == [[6]]])
+    sorted_packets = list(sorted(all_packets, key=cmp_to_key(lambda x, y: -1 if compare_packets(x, y) else 1)))
+    return math.prod([i + 1 for i, p in enumerate(sorted_packets) if p == [[2]] or p == [[6]]])
 
 
 if __name__ == "__main__":
