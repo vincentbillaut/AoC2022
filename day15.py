@@ -1,4 +1,5 @@
 import re
+import time
 from start_day import AdventOfCodeDay
 
 pattern = r"Sensor at x=(.+), y=(.+): closest beacon is at x=(.+), y=(.+)"
@@ -49,9 +50,12 @@ def merge_zones(zone1, zone2):
 def collect_all_dead_zones(init_positions):
     dead_zones = {}
     print("Collecting from")
+    ref = time.time()
     for i, (sensor, beacon) in enumerate(init_positions):
-        print(f"  ... sensor {i}")
         dead_zones = merge_zones(dead_zones, get_sensor_dead_zone(sensor, beacon))
+        checkpoint = time.time()
+        print(f"  ... sensor {i} (done in {int(checkpoint - ref)}s)")
+        ref = checkpoint
     return dead_zones
 
 
@@ -70,24 +74,11 @@ def crop_row(row, bounds):
     return [(a, b)] + crop_row(row[1:], bounds)
 
 
-def crop_zones(zones, bounds):
-    dead_zones = zones.copy()
-    for y in list(zones.keys()):
-        if not bounds[0] <= y <= bounds[1]:
-            del dead_zones[y]
-        else:
-            dead_zones[y] = crop_row(zones[y], bounds)
-    return dead_zones
-
-
 def tuning_frequency(init_positions, bounds):
     dead_zones = collect_all_dead_zones(init_positions)
-    print("Cropping")
-    dead_zones = crop_zones(dead_zones, bounds)
-    print("  ... done")
-    for y in dead_zones:
-        if len(dead_zones[y]) == 2:
-            return 4000000 * (dead_zones[y][0][1] + 1) + y
+    for y in range(bounds[0], bounds[1] + 1):
+        if len(dead_zones[y]) >= 2 and len(cropped_zone := crop_row(dead_zones[y], bounds)) == 2:
+            return 4000000 * (cropped_zone[0][1] + 1) + y
 
 
 if __name__ == "__main__":
