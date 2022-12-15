@@ -58,11 +58,7 @@ class AdventOfCodeDay:
         print(f"length {i+1}".center(40, "-"), "\n")
 
     def _load_all_lines(self, proc_f):
-        data = []
-        with open(self.input_path, "r") as f:
-            for l in f:
-                data.append(proc_f(l))
-        return data
+        return [proc_f(l) for l in open(self.input_path, "r")]
 
     def load_regex(self, pattern, n, strip=False):
         data = []
